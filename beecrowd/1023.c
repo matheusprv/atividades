@@ -8,6 +8,8 @@ typedef struct{
     int consumoMedio;
 }Consumo;
 
+void ordernacao(Consumo *, int, int);
+
 int main(){
     int qtdCasas;
     scanf("%d", &qtdCasas);
@@ -27,25 +29,55 @@ int main(){
         }
 
         //Ordenando o vetor a partir do consumo medio
-        Consumo temp;
-        for(int j=0; j<qtdCasas; j++){
-            for(int k=0; k<qtdCasas; k++){
-                if(casa[j].consumoMedio < casa[k].consumoMedio){
-                    temp = casa[k];
-                    casa[k] = casa[j];
-                    casa[j] = temp;
-                }
-            }
-        }
+        ordernacao(casa, 0, qtdCasas-1);
 
         printf("Cidade# %d:\n", i);
         for(int j=0; j<qtdCasas; j++){
             printf("%d-%d ", casa[j].qtdPessoas, casa[j].consumoMedio);
         }
-        printf("\nConsumo medio: %.2lf m3.\n\n", ((double) totalConsumo /totalPessoas));
+        printf("\nConsumo medio: %.2f m3.\n\n", ((float) totalConsumo /totalPessoas));
 
         free(casa);
 
         scanf("%d", &qtdCasas);
+    }
+}
+
+void ordernacao(Consumo * a, int left, int right){
+    
+    int i, j;
+    Consumo x, y;
+
+    i = left;
+    j = right;
+    x = a[(left + right) / 2];
+
+    while (i <= j)
+    {
+        while (a[i].consumoMedio < x.consumoMedio && i < right)
+        {
+            i++;
+        }
+        while (a[j].consumoMedio > x.consumoMedio && j > left)
+        {
+            j--;
+        }
+        if (i <= j)
+        {
+            y = a[i];
+            a[i] = a[j];
+            a[j] = y;
+            i++;
+            j--;
+        }
+    }
+
+    if (j > left)
+    {
+        ordernacao(a, left, j);
+    }
+    if (i < right)
+    {
+        ordernacao(a, i, right);
     }
 }
