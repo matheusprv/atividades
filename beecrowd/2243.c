@@ -12,7 +12,7 @@ int main(){
     int maiorAltura = -1;
     int menorAltura = 500000;
 
-    for(int i=0; i< colunas; i++){
+    for(int i=0; i < colunas; i++){
         scanf("%d", &alturas[i]);
     
         if(alturas[i] > maiorAltura)
@@ -20,10 +20,22 @@ int main(){
         
         else if(alturas[i] < menorAltura)
             menorAltura = alturas[i]; 
-    }
 
+        muro[i] = calloc(maiorAltura, sizeof(int));
+        for(int j=0; j<alturas[i]; j++){
+            muro[i][j] = 1;
+        }
+    }
+/*
     for(int i=0; i< colunas; i++){
         muro[i] = calloc(maiorAltura, sizeof(int));
+        for(int j=0; j<alturas[i]; j++){
+            muro[i][j] = 1;
+        }
+    }*/
+
+    for(int i=0; i< colunas; i++){
+        muro[i] = malloc(maiorAltura * sizeof(int));
         for(int j=0; j<alturas[i]; j++){
             muro[i][j] = 1;
         }
@@ -33,20 +45,25 @@ int main(){
 
     //Percorrendo todas as linhas
     for(int alturaAtual = maiorAltura-1; alturaAtual >= menorAltura; alturaAtual--){
+        
         //Percorrendo todas as colunas procurando um valor 1 para começar a procurar o triângulo
         for(int colunaAtual = menorAltura-1; colunaAtual < colunas - menorAltura; colunaAtual++){
+            
             //Verificando se essa posição pode chegar até a base
-            if(muro[colunaAtual][alturaAtual] == 1 && (colunaAtual - alturaAtual >= 0 && colunaAtual + alturaAtual <= colunas-1)){
+            if(muro[colunaAtual][alturaAtual] && (colunaAtual - alturaAtual >= 0 && colunaAtual + alturaAtual <= colunas-1)){
+                
+                trianguloEncontrado = 1;
+                
                 //Verificando se irá formar o triângulo
                 for(int k = 0; k < alturaAtual; k++){
-                    if(muro[colunaAtual + k][alturaAtual - k] == 1 && muro[colunaAtual - k][alturaAtual - k] == 1){
-                        trianguloEncontrado = 1;
-                    }
-                    else{
+                    
+                    if(!(muro[colunaAtual + k][alturaAtual - k] && muro[colunaAtual - k][alturaAtual - k] )){
                         trianguloEncontrado = 0;
                         break;
                     }
+                
                 }
+            
             }
 
             if(trianguloEncontrado){
